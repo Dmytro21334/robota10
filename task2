@@ -1,1 +1,53 @@
+import java.util.*;
+import java.util.stream.Collectors;
 
+public class Transport {
+    private final String type;
+    private final int capacity;
+    private final double speed;
+
+    public Transport(String type, int capacity, double speed) {
+        this.type = type;
+        this.capacity = capacity;
+        this.speed = speed;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public static void main(String[] args) {
+        List<Transport> transports = Arrays.asList(
+                new Transport("Автобус", 60, 80),
+                new Transport("Трамвай", 50, 45),
+                new Transport("Поїзд", 200, 120),
+                new Transport("Автомобіль", 4, 150),
+                new Transport("Авіація", 100, 800)
+        );
+
+        List<String> transportTypes = transports.stream()
+                .filter(t -> t.getCapacity() > 50)
+                .sorted(Comparator.comparingDouble(Transport::getSpeed).reversed())
+                .map(Transport::getType)
+                .collect(Collectors.toList());
+
+        double averageSpeed = transports.stream()
+                .filter(t -> t.getCapacity() > 50)
+                .mapToDouble(Transport::getSpeed)
+                .average()
+                .orElse(0);
+
+        System.out.println("Транспортні засоби з місткістю більше 50 осіб, відсортовані за швидкістю у спаданні:");
+        transportTypes.forEach(System.out::println);
+
+        System.out.println("\nСередня швидкість транспорту з місткістю більше 50 осіб: " + averageSpeed + " км/год");
+    }
+}
