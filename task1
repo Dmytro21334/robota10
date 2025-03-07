@@ -4,13 +4,11 @@ import java.util.stream.Collectors;
 
 class Project {
     private final String name;
-    private int teamSize;
-    private LocalDate deadline;
-    private double budget;
+    private final LocalDate deadline;
+    private final double budget;
 
     public Project(String name, int teamSize, LocalDate deadline, double budget) {
         this.name = name;
-        this.teamSize = teamSize;
         this.deadline = deadline;
         this.budget = budget;
     }
@@ -19,30 +17,49 @@ class Project {
         return name;
     }
 
+    public LocalDate getDeadline() {
+        return deadline;
+    }
+
     public double getBudget() {
         return budget;
     }
 
     @Override
     public String toString() {
-        String deadLine = null;
-        return name + " (Бюджет: " + budget + ", Дедлайн: " + null + ")";
+        return name + " (Бюджет: " + budget + ", Дедлайн: " + deadline + ")";
     }
 
     public static class ProjectManagement {
-        private static Character.UnicodeBlock Localdate;
-
         public static void main(String[] args) {
+            // Список проєктів
             List<Project> projects = Arrays.asList(
-                    new Project("Проєкт A", 10, Localdate.of(2025, 5, 1), 1200000),
-                    new Project("Проєкт B", 5, Localdate.of(2025, 4, 15), 800000),
-                    new Project("АПроєкт C", 8, Localdate.of(2025, 6, 20), 2000000),
-                    new Project("Проєкт D", 9, Localdate.of(2025, 3, 10), 1500000),
-                    );
-        }
+                    new Project("Проєкт A", 10, LocalDate.of(2025, 5, 1), 1200000),
+                    new Project("Проєкт B", 5, LocalDate.of(2025, 4, 15), 800000),
+                    new Project("Проєкт C", 8, LocalDate.of(2025, 6, 20), 2000000),
+                    new Project("Проєкт D", 9, LocalDate.of(2025, 3, 10), 1500000)
+            );
 
-        public static void setLocaldate(Character.UnicodeBlock localdate) {
-            Localdate = localdate;
+            List<Project> filteredProjects = projects.stream()
+                    .filter(project -> project.getBudget() > 1000000)
+                    .sorted(Comparator.comparing(Project::getDeadline)) // Сортуємо за дедлайном
+                    .collect(Collectors.toList());
+
+            List<String> projectNames = filteredProjects.stream()
+                    .map(Project::getName)
+                    .collect(Collectors.toList());
+
+            double totalBudget = filteredProjects.stream()
+                    .mapToDouble(Project::getBudget)
+                    .sum();
+
+            System.out.println("Проєкти з бюджетом більше 1 000 000 грн:");
+            filteredProjects.forEach(System.out::println);
+
+            System.out.println("\nНазви проєктів:");
+            projectNames.forEach(System.out::println);
+
+            System.out.println("\nЗагальний бюджет: " + totalBudget + " грн");
         }
     }
 }
