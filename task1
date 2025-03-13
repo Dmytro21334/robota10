@@ -32,7 +32,6 @@ public class Project {
 
     public static class ProjectManagement {
         public static void main(String[] args) {
-            // Список проєктів
             List<Project> projects = Arrays.asList(
                     new Project("Проєкт A", 10, LocalDate.of(2025, 5, 1), 1200000),
                     new Project("Проєкт B", 5, LocalDate.of(2025, 4, 15), 800000),
